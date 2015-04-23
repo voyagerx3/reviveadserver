@@ -1,0 +1,277 @@
++---------------------------------------------------------------------------+
+| Revive Adserver                                                           |
+| http://www.revive-adserver.com                                            |
+|                                                                           |
+| Copyright: See the COPYRIGHT.txt file.                                    |
+| License: GPLv2 or later, see the LICENSE.txt file.                        |
++---------------------------------------------------------------------------+
+
+Release Notes: Revive Adserver 3.1.0
+====================================
+
+These release notes cover what's new, system requirements, download and
+installation instructions, known issues and frequently asked questions for
+Revive Adserver. Please read these notes before reporting any bugs.
+
+
+What's New in Revive Adserver 3.1.0
+-----------------------------------
+
+ * Release date: 17 December 2014
+
+ Security Updates
+ ----------------
+
+ * CVE-2014-8793 - Fixed Cross-Site-Scripting vulnerability
+ * CVE-2014-8875 - Fixed Denial-of-Service vulnerability
+
+ For more information:
+ http://www.revive-adserver.com/security/revive-sa-2014-002
+
+ New Features
+ ------------
+
+ * Blank impressions are now logged and taken into account during
+   prioritization. This should allow using zones without remnant campaigns,
+   which was previously discouraged. Blank impressions are also counted in the
+   "Global History" and "Website & Zones" statistic screens and separately
+   displayed in the "Campaign distribution" tab for websites and zones.
+
+ * The "Contract (Exclusive)" campaign type has been re-named to "Override".
+
+ * Added the ability to intentionally attempt to over deliver Contract campaigns
+   by a given percentage of impressions against the predicted "ideal" to help
+   ensure that Contract campaigns always meet their contracted delivery by their
+   end date.
+
+ * The Revive Adserver delivery engine now includes a completely inclusive
+   CORS header (i.e. 'Access-Control-Allow-Origin: *').
+
+ * The domain used for the viewerId cookie is now configurable.
+
+ * The "My Account" main menu has been re-named to "Preferences" for clarity.
+
+ * The quick navigation dropdown lists for advertisers/campaigns and websites is
+   now sorted alphabetically.
+
+ * The "midnight" sync process that checks for updates to Revive Adserver is
+   now the very last thing to happen in the overall maintenance process.
+
+ Bug Fixes
+ ---------
+
+ * Fixed a problem with timezones not being taken into account when running
+   the zone allocation algorithm during maintenance. This resulted in
+   underdelivery if the account timezone had a positive offset from UTC, and
+   potentially some overdelivery otherwise.
+
+ * Fixed the editing of campaigns when conversion tracking is disabled.
+
+ * Fixed the preview of all banners on the "Banners" page user interface
+   preference.
+
+ * Fixed incorrectly displayed error message when trying to link a banner to
+   an email zone where the banner's parent campaign dates overlap with an
+   already linked campaign.
+
+ * Fixed incorrectly displayed message stating that a link has been created when
+   trying to link an email zone to a banner where the banner's parent campaign
+   dates overlap with an already linked campaign.
+
+ * VAST tracking URLs now use https:// when called via SSL.
+
+ * Removed useless Content-Length headers when sending the 1x1 transparent gif
+   and spc delivery files, as the header interferes with ob_gzhandler and/or
+   zlib.output_compression.
+
+ * Fixed issue with banner delivery over SSL when using Postgres.
+
+ * Fixed click redirection to internationalized domain names when the IDN
+   functions are available (PHP 5.3+).
+
+ * Properly display the current value in the UI when settings contain an
+   underscore in their name.
+
+ * Properly display 'Site - Variable' delivery limitations when the value is set
+   to zero (i.e. '0').
+
+ * Fixed product name and removed bad documentation link on installer pre-check
+   warning page.
+
+ * Allow Revive Adserver to be installed on Debian Wheezy PHP versions that have
+   had a critical PHP bugfix backported.
+
+ * Fixed an issue with old creative file being deleted although still in use
+   when a banner image file was replaced.
+
+ * Fixed use of custom application name in the generation of zone invocation
+   tags; made the use of this consistent across tracker beacons and SPC tags
+   as well, and removed all incorrect code relating to a non-existent user
+   preference.
+
+ * Added compatibility for systems affected by PHP bug #53829, i.e. having
+   gzopen64 rather than gzopen.
+
+ * Fixed a problem with frequency capping/blocking not working for video ads.
+
+ * Fixed an issue in distributed maintenance trying to migrate unsupported
+   plugin statistics.
+
+ * Updated ISO-3166 country codes to the latest available version. This also
+   fixes an issue with Serbia country targeting previously not working.
+
+ Non-Backwards Compatible Changes
+ --------------------------------
+
+ * Revive Adserver now requires PHP 5.3+
+
+ * HTML banners no longer present URL and Target fields in the user interface
+   unless editing an existing HTML banner where one of these fields is present;
+   the URL(s) and target(s) should be set as part of the HTML banner.
+
+ * A number of database table columns are removed as part of the upgrade
+   process for Revive Adserver 3.1.0, as they were deprecated with the removal
+   of the OpenX Market in version 3.0.0. Please ensure that you back up your
+   Revive Adserver database before upgrading to 3.1.0.
+
+ * Existing accounts with the name "Default manager" will be updated to
+   "Default Account" to ensure the account name is consistent with updated
+   language files. Similarly, existing accounts with the name "Administrator
+   account" will be updated to "System Administrator".
+
+ * Activation/deactivation emails and scheduled reports are now disabled by
+   default when creating new advertisers via the API, in order to match the UI
+   behaviour. This does not affect any existing advertiser account settings for
+   this feature; but please be aware that the default for all new advertiser
+   accounts has been changed.
+
+ * The adRender hook function signature was missing the $richMedia argument before
+   $loc and $referer. Please make sure you double check your custom plugins in
+   case they use such hook.
+
+
+System Requirements
+-------------------
+
+Before installing, please make sure your server meets the system
+requirements, which can be found at http://www.revive-adserver.com/.
+
+
+Downloading and Installing
+--------------------------
+
+ * Downloading Revive Adserver
+
+   You can always find the latest version of Revive Adserver at
+   http://www.revive-adserver.com.
+
+ * Installing Revive Adserver
+
+   Installing Revive Adserver is a straightforward process. Follow the steps at
+   http://www.revive-adserver.com/support/installation/.
+
+ * Upgrading Revive Adserver
+
+   Upgrading Revive Adserver is a straightforward process. Follow the steps at
+   http://www.revive-adserver.com/support/upgrading/.
+
+   Please note: The upgrade process will update your Revive Adserver database,
+   and the database may no longer be compatible with your old installation.
+   You *must* create a backup of your database before you upgrade, just in case.
+
+   The upgrade wizard supports upgrading from:
+
+   ---------------------------------------------------------------
+   | Product                             | Version(s)            |
+   ---------------------------------------------------------------
+   | Revive Adserver 3.x                 | All versions          |
+   ---------------------------------------------------------------
+   | OpenX 2.8                           | All versions          |
+   ---------------------------------------------------------------
+   | OpenX 2.7 beta                      | All previous versions |
+   ---------------------------------------------------------------
+   | OpenX 2.6                           | All versions          |
+   ---------------------------------------------------------------
+   | OpenX 2.4                           | All versions          |
+   ---------------------------------------------------------------
+   | Openads 2.4                         | All versions          |
+   ---------------------------------------------------------------
+   | Openads 2.0 for MySQL               | 2.0.11-pr1            |
+   |   (formerly phpAdsNew)              |                       |
+   ---------------------------------------------------------------
+   | Openads 2.3 alpha                   | 2.3.31-alpha-pr3      |
+   |   (formerly Max Media Manager v0.3) |   (v0.3.31-alpha-pr3) |
+   ---------------------------------------------------------------
+   | Openads 2.3 beta                    | All versions          |
+   ---------------------------------------------------------------
+   | Max Media Manager v0.1              | v0.1.29-rc            |
+   ---------------------------------------------------------------
+   | Openads 2.0 for PostgreSQL          | 2.0.11-pr1            |
+   |  (formerly phpPgAds)                |                       |
+   ---------------------------------------------------------------
+
+   If you are not running one of these versions, you will need to upgrade
+   your existing installation before you will be able to upgrade to
+   Revive Adserver.
+
+ * Uninstalling Revive Adserver
+
+   To uninstall Revive Adserver, delete the installed files and database tables.
+
+
+Known Issues
+------------
+
+This list covers some of the known problems with Revive Adserver. Please read
+this before reporting any new bugs.
+
+ * The upgrade process may time out with very large databases. See
+   http://www.revive-adserver.com/docs/faq for more information if you
+   have a large database.
+
+ * If you want to run Revive Adserver with MySQL, please note that MySQL 4.1 or
+   higher is required. If you are using an older version of MySQL, you will
+   need to update you database software before upgrading.
+
+ * If you want to run Revive Adserver with PostgreSQL, please note that
+   PostgreSQL 8.1 or higher is required. If you are using an older version of
+   PostgreSQL, you will need to update your database software before
+   upgrading.
+
+ * Some of the PEAR libraries used are not compatible with database prefix
+   names with double "_" characters (e.g. "rv__"). You should NOT install
+   Revive Adserver with a prefix of this format.
+
+ * Some users have reported issues of being logged out when viewing
+   statistics. This can be worked around by ensuring that the timezone is
+   correctly set in PHP.
+
+ * See http://www.revive-adserver.com/support/bugs/ for the latest bug reports.
+
+
+FAQ
+---
+
+ 1. What happened to OpenX Source?
+
+    OpenX Source has re-branded as Revive Adserver. It is still a completely
+    free, open source ad serving solution, and remains licenses under the
+    GPL v2 or greater license. Apart from the code moving home and a change of
+    name, Revive Adserver is just the same as the old OpenX Source application.
+
+ 2. Can I upgrade from OpenX Source?
+
+    Yes. OpenX Source has rebranded as Revive Adserver. You will be able to
+    upgrade from any version of OpenX Source.
+
+ 3. Where can I get help?
+
+    You can ask for help at the Revive Adserver community forums:
+    http://forum.revive-adserver.com/
+
+ 4. What can I do to help?
+
+    We need help from both developers and users to provide as much feedback
+    as possible to make Revive Adserver even better. You can contribute
+    feedback, bug reports, submit patches or help with documentation by
+    visiting http://www.revive-adserver.com/.
